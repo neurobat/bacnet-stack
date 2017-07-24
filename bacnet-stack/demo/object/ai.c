@@ -689,17 +689,16 @@ bool Analog_Input_Write_Property(
         case PROP_PRESENT_VALUE:
             status =
                 WPValidateArgType(&value, BACNET_APPLICATION_TAG_REAL,
-                &wp_data->error_class, &wp_data->error_code);
+                                  &wp_data->error_class, &wp_data->error_code);
 
             if (status) {
-                if (CurrentAI->Out_Of_Service == true) {
+                if (! CurrentAI->Out_Of_Service) {
                     Analog_Input_Present_Value_Set(wp_data->object_instance,
-                        value.type.Real);
-                } else {
-                    wp_data->error_class = ERROR_CLASS_PROPERTY;
-                    wp_data->error_code = ERROR_CODE_WRITE_ACCESS_DENIED;
-                    status = false;
+                                                   value.type.Real);
                 }
+            } else {
+                wp_data->error_class = ERROR_CLASS_PROPERTY;
+                wp_data->error_code = ERROR_CODE_WRITE_ACCESS_DENIED;
             }
             break;
 
