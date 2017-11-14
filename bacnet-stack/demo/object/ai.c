@@ -46,6 +46,10 @@
 #define MAX_ANALOG_INPUTS 4
 #endif
 
+#ifndef ALLOW_WRITE_PRESENT_VALUE
+#define ALLOW_WRITE_PRESENT_VALUE true
+#endif
+
 
 ANALOG_INPUT_DESCR AI_Descr[MAX_ANALOG_INPUTS];
 
@@ -692,7 +696,7 @@ bool Analog_Input_Write_Property(
                 &wp_data->error_class, &wp_data->error_code);
 
             if (status) {
-                if (CurrentAI->Out_Of_Service == true) {
+                if (ALLOW_WRITE_PRESENT_VALUE || CurrentAI->Out_Of_Service == true) {
                     Analog_Input_Present_Value_Set(wp_data->object_instance,
                         value.type.Real);
                 } else {
